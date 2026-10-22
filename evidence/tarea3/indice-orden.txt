@@ -1,0 +1,47 @@
+== Contexto ==
+{
+  eventos: 400,
+  en_el_rango_de_fechas: 138,
+  conciertos_en_el_rango: 31,
+  respuesta_A1: 7
+}
+== categoria_1_ciudad_1_fecha_1 ==
+{
+  nota: 'propuesto: igualdad, igualdad, rango/orden',
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  nReturned: 7,
+  totalKeysExamined: 7,
+  totalDocsExamined: 7
+}
+== ciudad_1_categoria_1_fecha_1 ==
+{
+  nota: 'mismas igualdades en otro orden',
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  nReturned: 7,
+  totalKeysExamined: 7,
+  totalDocsExamined: 7
+}
+== categoria_1_fecha_1_ciudad_1 ==
+{
+  nota: 'rango antes de la segunda igualdad',
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  nReturned: 7,
+  totalKeysExamined: 30,
+  totalDocsExamined: 7
+}
+== fecha_1_categoria_1_ciudad_1 ==
+{
+  nota: 'rango primero',
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  nReturned: 7,
+  totalKeysExamined: 90,
+  totalDocsExamined: 7
+}
+== categoria_1_fecha_1 ==
+{
+  nota: 'el índice del Paso 5 del Lab 3, sin ciudad',
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  nReturned: 7,
+  totalKeysExamined: 31,
+  totalDocsExamined: 31
+}
