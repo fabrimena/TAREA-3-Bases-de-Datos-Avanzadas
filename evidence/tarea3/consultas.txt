@@ -1,0 +1,73 @@
+== A1 ==
+{
+  fecha: '2026-12-02',
+  nombre: 'Concierto Urbano 331',
+  recinto: 'Auditorio Norte'
+}
+{
+  fecha: '2026-12-08',
+  nombre: 'Concierto Eléctrico 232',
+  recinto: 'Parque de Eventos Sur'
+}
+{
+  fecha: '2027-01-09',
+  nombre: 'Concierto Tropical 115',
+  recinto: 'Arena Central'
+}
+{
+  fecha: '2027-01-13',
+  nombre: 'Concierto Vibrante 1',
+  recinto: 'Arena Central'
+}
+{
+  fecha: '2027-01-24',
+  nombre: 'Concierto Andino 196',
+  recinto: 'Parque de Eventos Sur'
+}
+{
+  fecha: '2027-02-16',
+  nombre: 'Concierto Urbano 273',
+  recinto: 'Teatro del Valle'
+}
+{
+  fecha: '2027-02-26',
+  nombre: 'Concierto Solar 271',
+  recinto: 'Parque de Eventos Sur'
+}
+== A1 · explain antes del índice ==
+{
+  etapas: 'SORT <- PROJECTION_SIMPLE <- COLLSCAN',
+  indice: null,
+  indexBounds: null,
+  nReturned: 7,
+  totalKeysExamined: 0,
+  totalDocsExamined: 400,
+  executionTimeMillis: 0
+}
+== A1 · createIndex ==
+categoria_1_ciudad_1_fecha_1
+== A1 · explain después del índice ==
+{
+  etapas: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN',
+  indice: 'categoria_1_ciudad_1_fecha_1',
+  indexBounds: {
+    categoria: [
+      '["concierto", "concierto"]'
+    ],
+    ciudad: [
+      '["Heredia", "Heredia"]'
+    ],
+    fecha: [
+      '["2026-12-01", "2027-02-28"]'
+    ]
+  },
+  nReturned: 7,
+  totalKeysExamined: 7,
+  totalDocsExamined: 7,
+  executionTimeMillis: 0
+}
+== A2 ==
+== A2 · comparación con y sin $elemMatch ==
+== A3 ==
+== A4 ==
+== A5 ==
