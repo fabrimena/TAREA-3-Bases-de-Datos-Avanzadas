@@ -13,6 +13,18 @@ Reglas que no se negocian:
 
 ---
 
+## Estado actual (actualizado por A el 22 oct)
+
+| Persona | Hecho | Pendiente |
+| ------- | ----- | --------- |
+| **A** | Pasos 0–4: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe | invitar a B y C · fusionar `fabricio` → `main` · Paso 7 (espera a B y C) |
+| **B** | — | Paso 1 en su máquina, Paso 5 (A2, comparación, A3, A4), su sección del informe |
+| **C** | — | Paso 1 en su máquina, Paso 6 (A5, `parte_b.js`), su sección del informe |
+
+Leyenda: «hecho» va con el commit que lo respalda; «pendiente», con lo que lo bloquea.
+
+---
+
 ## Reparto del trabajo
 
 > Rellene los nombres de B y C. Cada paso más abajo indica su responsable.
@@ -45,16 +57,16 @@ que no deberían chocar al fusionar.
 
 ### Checklist — Persona A
 
-- [ ] Paso 0 · Crear el repo público y subir el entorno del curso
-- [ ] Paso 0 · Invitar a B y C como colaboradores en GitHub
-- [ ] Paso 1 · `make build` + contenedor `ti4601-tarea3` + semilla + `mongoimport` → `datos-manifest.txt`, `import.txt`, `comandos.md` · commit
-- [ ] Paso 2 · Esqueleto de `tarea/consultas.js` (encabezados A1–A5, un bloque por persona) · commit
-- [ ] Paso 3 · **A1** + `explain` antes/después + `createIndex` → `consultas.txt` · commit
-- [ ] Paso 3 · Orden de los campos del índice medido → `indice-orden.txt` · commit
-- [ ] Paso 4 · Esqueleto del informe `tarea/INFORME.tex` con la sección de A1 e índice · commit
-- [ ] Paso 4 · Fusionar `fabricio` en `main` (PR) para que B y C partan del esqueleto
-- [ ] Paso 7 · Ejecución final completa de `consultas.js` (con A2–A5 ya fusionados) → `consultas.txt` · commit
-- [ ] Paso 7 · Armar el PDF final (≤ 2 páginas) + revisión de `FALTA` + lista de control
+- [x] Paso 0 · Crear el repo público y subir el entorno del curso — hecho en `30f7c77`, `f97c197` (en `main`)
+- [ ] Paso 0 · Invitar a B y C como colaboradores en GitHub — pendiente: **B y C** deben pasarle a A su usuario de GitHub
+- [x] Paso 1 · `make build` + contenedor `ti4601-tarea3` + semilla + `mongoimport` → `datos-manifest.txt`, `import.txt`, `comandos.md` · commit — hecho en `650d846`
+- [x] Paso 2 · Esqueleto de `tarea/consultas.js` (encabezados A1–A5, un bloque por persona) · commit — hecho en `9839139`
+- [x] Paso 3 · **A1** + `explain` antes/después + `createIndex` → `consultas.txt` · commit — hecho en `8af87c7` (7 eventos; `COLLSCAN` 400 docs → `IXSCAN` 7/7/7)
+- [x] Paso 3 · Orden de los campos del índice medido → `indice-orden.txt` · commit — hecho en `c8599f4` (7 claves contra 30 / 90 / 31)
+- [x] Paso 4 · Esqueleto del informe `tarea/INFORME.tex` con la sección de A1 e índice · commit — hecho en `1d28b1f`
+- [ ] Paso 4 · Fusionar `fabricio` en `main` (PR) para que B y C partan del esqueleto — pendiente: revisión de A (no depende de B ni C)
+- [ ] Paso 7 · Ejecución final completa de `consultas.js` (con A2–A5 ya fusionados) → `consultas.txt` · commit — pendiente: **B** (A2–A4) y **C** (A5)
+- [ ] Paso 7 · Armar el PDF final (≤ 2 páginas) + revisión de `FALTA` + lista de control — pendiente: **B** y **C** (sus secciones, `parte-b.txt` y sus nombres)
 
 ### Checklist — Persona B
 
@@ -74,7 +86,7 @@ que no deberían chocar al fusionar.
 
 ---
 
-## Paso 0 — Repo propio · Responsable: A
+## Paso 0 — Repo propio · Responsable: A · hecho
 
 El repo es copia del repo del curso con historia propia: <https://github.com/fabrimena/TAREA-3-Bases-de-Datos-Avanzadas>.
 
@@ -91,7 +103,7 @@ git checkout -b <su-nombre> main      # después de que A fusione fabricio
 
 ---
 
-## Paso 1 — Entorno (una sola vez) · Responsable: A (evidencia) · B y C (solo en su máquina)
+## Paso 1 — Entorno (una sola vez) · Responsable: A (evidencia) · B y C (solo en su máquina) · A: hecho · B y C: pendiente
 
 **HOST**, desde la raíz del repo:
 
@@ -125,7 +137,7 @@ Abrir `mongosh` para probar: `docker exec -it ti4601-tarea3 mongosh boleteria`.
 
 ---
 
-## Paso 2 — Esqueleto de `consultas.js` · Responsable: A
+## Paso 2 — Esqueleto de `consultas.js` · Responsable: A · hecho
 
 Archivo: `labs/lab3-mongo-replicas/tarea/consultas.js`. Se ejecuta como **script**, así que:
 
@@ -142,7 +154,7 @@ docker exec -i ti4601-tarea3 mongosh --quiet boleteria --file /dev/stdin \
 
 ---
 
-## Paso 3 — A1 e índice compuesto · Responsable: A
+## Paso 3 — A1 e índice compuesto · Responsable: A · hecho
 
 **A1.** Nombre, recinto y fecha de los conciertos de Heredia entre el 2026-12-01 y el 2027-02-28, por fecha.
 Esperado: **7 eventos**, del `2026-12-02` al `2027-02-26`.
@@ -163,10 +175,10 @@ claves y documentos examinados, no con ms** (400 documentos tardan ~1 ms en cual
 
 ---
 
-## Paso 4 — Base del informe y PR · Responsable: A
+## Paso 4 — Base del informe y PR · Responsable: A · informe: hecho · PR: pendiente
 
 - `labs/lab3-mongo-replicas/tarea/INFORME.tex`: misma plantilla de los informes del Lab 1 y Lab 2. Cada sección
-  pendiente dice `FALTA (Persona X)`; B y C reemplazan **solo** la suya.
+  pendiente usa la macro `\falta{Persona X: ...}` (sale en rojo); B y C reemplazan **solo** la suya.
 - PR `fabricio` → `main` cuando el esqueleto corra completo.
 
 ---
@@ -276,7 +288,7 @@ log 6 "A5 (162810) + parte_b.js" OK    # en HOST
 
 ---
 
-## Paso 7 — Ejecución final y PDF · Responsable: A
+## Paso 7 — Ejecución final y PDF · Responsable: A · pendiente: espera a B y C
 
 Con las ramas de B y C ya fusionadas en `main`:
 
@@ -293,7 +305,7 @@ Revisar que no falte evidencia (**HOST**):
 ```bash
 cd evidence/tarea3 && for f in comandos.md datos-manifest.txt import.txt consultas.txt \
   indice-orden.txt parte-b.txt; do test -s "$f" || echo "FALTA: $f"; done; cd -
-grep -n 'FALTA' labs/lab3-mongo-replicas/tarea/INFORME.tex     # no debe imprimir nada
+grep -n '\\falta{' labs/lab3-mongo-replicas/tarea/INFORME.tex   # no debe imprimir nada
 ```
 
 Compilar el PDF (cualquier `pdflatex` sirve; también Overleaf):
@@ -327,8 +339,8 @@ evidence/tarea3/consultas.txt      indice-orden.txt        parte-b.txt
 
 - [ ] `consultas.js` corre completo con el comando del enunciado (sin `use` ni `show`)
 - [ ] Cada consulta tiene su `print("== Ax ==")` y proyecciones mínimas
-- [ ] `explain` antes (`COLLSCAN`) y después (`IXSCAN`) con `totalDocsExamined`, `totalKeysExamined`, `nReturned` y etapa
-- [ ] Orden de los campos del índice justificado
+- [x] `explain` antes (`COLLSCAN`) y después (`IXSCAN`) con `totalDocsExamined`, `totalKeysExamined`, `nReturned` y etapa — hecho en `8af87c7`
+- [x] Orden de los campos del índice justificado — hecho en `c8599f4` + sección A1 de `INFORME.tex`
 - [ ] A2: 195 contra 265 explicado
 - [ ] Parte B con `bsonsize()` y cifras que salen de `parte-b.txt`
 - [ ] Cada cifra del PDF sale de un archivo de `evidence/tarea3/`
