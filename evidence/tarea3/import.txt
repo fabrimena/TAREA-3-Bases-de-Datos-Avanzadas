@@ -1,0 +1,3 @@
+2026-10-22T19:54:50.708+0000	connected to: mongodb://localhost/
+2026-10-22T19:54:50.708+0000	dropping: `boleteria.eventos`
+2026-10-22T19:54:50.734+0000	400 document(s) imported successfully. 0 document(s) failed to import.
