@@ -10,3 +10,4 @@ tmp/
 venv/
 .vscode/
 labs/*/data/
+*.aux
