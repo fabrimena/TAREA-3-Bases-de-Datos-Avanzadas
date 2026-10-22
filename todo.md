@@ -17,7 +17,7 @@ Reglas que no se negocian:
 
 | Persona | Hecho | Pendiente |
 | ------- | ----- | --------- |
-| **A** | Pasos 0–4: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe | invitar a B y C · fusionar `fabricio` → `main` · Paso 7 (espera a B y C) |
+| **A** | Pasos 0–4: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe, invitaciones a B y C | fusionar `fabricio` → `main` · Paso 7 (espera a B y C) |
 | **B** | — | Paso 1 en su máquina, Paso 5 (A2, comparación, A3, A4), su sección del informe |
 | **C** | — | Paso 1 en su máquina, Paso 6 (A5, `parte_b.js`), su sección del informe |
 
@@ -58,7 +58,7 @@ que no deberían chocar al fusionar.
 ### Checklist — Persona A
 
 - [x] Paso 0 · Crear el repo público y subir el entorno del curso — hecho en `30f7c77`, `f97c197` (en `main`)
-- [ ] Paso 0 · Invitar a B y C como colaboradores en GitHub — pendiente: **B y C** deben pasarle a A su usuario de GitHub
+- [x] Paso 0 · Invitar a B y C como colaboradores en GitHub — hecho: invitaciones enviadas a `ChrisRC7` y `AlissonRM19` (cada uno debe aceptarla en GitHub)
 - [x] Paso 1 · `make build` + contenedor `ti4601-tarea3` + semilla + `mongoimport` → `datos-manifest.txt`, `import.txt`, `comandos.md` · commit — hecho en `650d846`
 - [x] Paso 2 · Esqueleto de `tarea/consultas.js` (encabezados A1–A5, un bloque por persona) · commit — hecho en `9839139`
 - [x] Paso 3 · **A1** + `explain` antes/después + `createIndex` → `consultas.txt` · commit — hecho en `8af87c7` (7 eventos; `COLLSCAN` 400 docs → `IXSCAN` 7/7/7)
