@@ -19,7 +19,7 @@ Reglas que no se negocian:
 | ------- | ----- | --------- |
 | **A** | Pasos 0–4: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe, invitaciones a B y C | fusionar `fabricio` → `main` · Paso 7 (espera a B y C) |
 | **B** | — | Paso 1 en su máquina, Paso 5 (A2, comparación, A3, A4), su sección del informe |
-| **C** | — | Paso 1 en su máquina, Paso 6 (A5, `parte_b.js`), su sección del informe |
+| **C** | Paso 1 en su máquina (MongoDB 8.2, `sha256` igual), Paso 6: A5 y `parte_b.js` + `parte-b.txt`, sección A5 + Parte B de `INFORME.tex` | PR `Chris` → `main` |
 
 Leyenda: «hecho» va con el commit que lo respalda; «pendiente», con lo que lo bloquea.
 
@@ -79,10 +79,10 @@ que no deberían chocar al fusionar.
 
 ### Checklist — Persona C
 
-- [ ] Paso 1 en su máquina (igual que B)
-- [ ] Paso 6 · **A5** (`$unwind` + `$group` + `$sort`) · commit
-- [ ] Paso 6 · **Parte B.1** `tarea/parte_b.js` con `bsonsize()` → `evidence/tarea3/parte-b.txt` · commit
-- [ ] Informe: A5 + Parte B en **media página** (B.1 cálculo, B.2 concurrencia, B.3 regla + otro dominio)
+- [x] Paso 1 en su máquina (igual que B)
+- [x] Paso 6 · **A5** (`$unwind` + `$group` + `$sort`) · commit
+- [x] Paso 6 · **Parte B.1** `tarea/parte_b.js` con `bsonsize()` → `evidence/tarea3/parte-b.txt` · commit
+- [x] Informe: A5 + Parte B en **media página** (B.1 cálculo, B.2 concurrencia, B.3 regla + otro dominio)
 
 ---
 

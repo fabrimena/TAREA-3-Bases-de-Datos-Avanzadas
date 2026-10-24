@@ -43,7 +43,7 @@
 
 {\Large\bfseries\color{acc} Tarea 3 --- Consultas y modelado de documentos en MongoDB}\\[2pt]
 {\footnotesize\color{gris} TI-4601 Bases de Datos Avanzadas $\cdot$ Fabricio Mena $\cdot$
-\falta{Alisson Redondo} $\cdot$ \falta{nombre de C}\\
+\falta{Alisson Redondo} $\cdot$ Christopher Rodriguez\\
 Repositorio: \texttt{https://github.com/fabrimena/TAREA-3-Bases-de-Datos-Avanzadas}}
 
 \vspace{3pt}\hrule\vspace{4pt}
@@ -154,13 +154,45 @@ valor, ambos filtros producen el mismo conteo.
 
 \subsection{A5: capacidad total por ciudad}
 
-\falta{Persona C: consulta con \texttt{\$unwind} + \texttt{\$group} + \texttt{\$sort} y resultado; control contra
-\texttt{capacidad\_total} 162\,810}
+{\footnotesize\begin{verbatim}
+db.eventos.aggregate([{$unwind:"$zonas"},
+ {$group:{_id:"$ciudad",capacidad_total:{$sum:"$zonas.capacidad"}}},
+ {$sort:{capacidad_total:-1}}])
+\end{verbatim}}
+\texttt{\$unwind} produce un documento por cada elemento de \texttt{zonas}: un evento con 3 zonas pasa
+a ser 3 documentos que repiten \texttt{ciudad} y llevan una sola zona cada uno, así que los 400 eventos
+se convierten en 1\,189 filas y \texttt{\$sum} puede sumar \texttt{zonas.capacidad} por ciudad.
+Resultado (8 ciudades): \textbf{Heredia 30\,380}, Liberia 24\,160, San Carlos 21\,810, Alajuela 21\,020,
+Puntarenas 17\,180, San José 17\,150, Limón 15\,560 y \textbf{Cartago 15\,550}. Control: la suma de las
+8 es \textbf{162\,810}, igual a \texttt{capacidad\_total} de \texttt{datos-manifest.txt}.
 
 \section{Parte B --- Anidar o referenciar}
 
-\falta{Persona C: media página como máximo, con cifras de \texttt{parte-b.txt}: B.1 \texttt{bsonsize()} y
-órdenes que caben en 16 MB; B.2 concurrencia sobre un mismo documento (una ventaja y una desventaja);
-B.3 regla y su aplicación a otro dominio}
+\textbf{B.1 Tamaño} (\texttt{parte\_b.js}, \texttt{parte-b.txt}). Una orden con \texttt{\_id},
+\texttt{evento\_id}, \texttt{zona}, \texttt{cantidad}, \texttt{estado} y \texttt{creada\_en} pesa
+\textbf{123 B}; el evento \texttt{EV-0001} sin órdenes, \textbf{508 B}. La estimación ingenua
+$(16\,777\,216-508)/123$ da 136\,396 órdenes, pero dentro de un arreglo cada elemento paga además
+1 byte de tipo y su índice como \emph{string} con terminador (\texttt{"0"}\dots\texttt{"999"}):
+medido con 1\,000 órdenes embebidas, cada una cuesta \textbf{127{,}89 B} (4{,}89 B extra), y el costo
+sube a 131 B cuando el índice llega a 6 dígitos. El máximo exacto es \textbf{128\,914 órdenes}:
+con ellas el documento mide 16\,777\,146 B y con una más, 16\,777\,277 B (no cabe). Mucho antes del
+límite el problema es el peso: con 10\,000 órdenes el evento pasa de 0{,}5 KB a 1{,}29 MB, y
+\emph{cada} lectura del evento (listar, ver zonas) trae todas sus órdenes.
+
+\textbf{B.2 Concurrencia.} MongoDB serializa las escrituras sobre un mismo documento: si cientos de
+compradores agregan su orden al mismo evento, WiredTiger detecta conflictos de escritura y las
+reintenta una tras otra, y el evento se vuelve un documento caliente. \emph{Ventaja:} el descuento de
+stock y el registro de la orden ocurren en una sola actualización atómica, sin transacción
+multi-documento. \emph{Desventaja:} contención en la venta de un evento popular, un documento que
+crece sin límite y cuesta más en cada lectura y en la replicación, y el tope de 16 MB.
+\textbf{Decisión:} referenciar (\texttt{ordenes} con \texttt{evento\_id}, como en el Lab 3) y dejar
+en el evento solo el contador \texttt{zonas.disponibles}.
+
+\textbf{B.3 Regla.} \emph{Anidar lo que se lee siempre junto, pertenece a un solo padre y está
+acotado; referenciar lo que crece sin límite, se escribe en paralelo o se consulta por separado.}
+En un sistema de biblioteca, los autores y el ISBN de un libro se anidan en el libro (pocos, fijos y
+siempre se muestran con él); los préstamos se referencian en su propia colección con
+\texttt{libro\_id}, porque se acumulan sin fin, los registran varios mostradores a la vez y se
+consultan por usuario o por fecha de vencimiento.
 
 \end{document}

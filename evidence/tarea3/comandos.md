@@ -9,3 +9,4 @@
 - 2026-10-22 13:57:20 · Paso 4 · `INFORME.tex: sección A1 + índice; secciones de B y C marcadas con \falta{}` · OK
 - 2026-10-24 14:03:26 · Paso 6 · `consultas.js: A5 (8 ciudades, Heredia 30380 … Cartago 15550; suma 162810) · MongoDB 8.2.12 local` · OK
 - 2026-10-24 14:04:07 · Paso 6 · `parte_b.js: orden 123 B, evento 508 B, 127.89 B por orden embebida, máximo 128914 órdenes (ingenua 136396)` · OK
+- 2026-10-24 14:04:50 · Paso 6 · `INFORME.tex: sección A5 + Parte B (B.1, B.2, B.3); compila en 2 páginas` · OK
