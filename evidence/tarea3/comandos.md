@@ -10,3 +10,5 @@
 - 2026-10-24 14:03:26 · Paso 6 · `consultas.js: A5 (8 ciudades, Heredia 30380 … Cartago 15550; suma 162810) · MongoDB 8.2.12 local` · OK
 - 2026-10-24 14:04:07 · Paso 6 · `parte_b.js: orden 123 B, evento 508 B, 127.89 B por orden embebida, máximo 128914 órdenes (ingenua 136396)` · OK
 - 2026-10-24 14:04:50 · Paso 6 · `INFORME.tex: sección A5 + Parte B (B.1, B.2, B.3); compila en 2 páginas` · OK
+- 2026-10-24 14:56:10 · Paso 7 · `consultas.js completo (MongoDB 8.0.34): A1 7 (COLLSCAN 400 -> IXSCAN 7/7/7), A2 195 vs 265, A3 91, A4 275, A5 8 ciudades (suma 162810)` · OK
+- 2026-10-24 14:56:10 · Paso 7 · `parte_b.js en MongoDB 8.0.34: mismo resultado (123 B, 508 B, 127.89 B, 128914 órdenes)` · OK
