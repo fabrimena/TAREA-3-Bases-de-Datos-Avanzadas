@@ -92,8 +92,24 @@ db.eventos.find(
   }
 ).forEach(printjson);
 
-// Pendiente: comparacion A2, A3 y A4.
+
+// A2: comparación entre consultas con y sin $elemMatch.
 print("== A2 - comparacion con y sin $elemMatch ==");
+
+const conElemMatch = db.eventos.countDocuments(filtroA2);
+
+const sinElemMatch = db.eventos.countDocuments({
+  "zonas.nombre": "VIP",
+  "zonas.precio": { $lt: 48000 }
+});
+
+printjson({
+  con_elemMatch: conElemMatch,
+  sin_elemMatch: sinElemMatch,
+  diferencia: sinElemMatch - conElemMatch
+});
+
+// Pendiente: comparacion A3 y A4.
 print("== A3 ==");
 print("== A4 ==");
 // ============================================================ Persona C · A5
