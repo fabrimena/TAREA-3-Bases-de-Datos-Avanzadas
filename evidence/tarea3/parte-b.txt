@@ -1,0 +1,63 @@
+== B1 · orden suelta ==
+{
+  orden: {
+    _id: 'ORD-0000000',
+    evento_id: 'EV-0001',
+    zona: 'General',
+    cantidad: 2,
+    estado: 'confirmada',
+    creada_en: ISODate('2026-10-24T12:00:00.000Z')
+  },
+  bsonsize: 123
+}
+== B1 · evento sin órdenes ==
+{
+  _id: 'EV-0001',
+  zonas: 4,
+  bsonsize: 508
+}
+== B1 · costo de una orden embebida (medido con 1 000) ==
+{
+  evento_con_arreglo_vacio: 522,
+  evento_con_1000_ordenes: 128412,
+  bytes_por_orden_embebida: 127.89,
+  extra_sobre_orden_suelta: 4.89,
+  nota: "cada elemento paga 1 byte de tipo + su índice como string con terminador ('0', '1', …, '999')"
+}
+== B1 · órdenes que caben en 16 MiB ==
+{
+  limite_bytes: 16777216,
+  estimacion_ingenua: 136396,
+  maximo_exacto: 128914,
+  bsonsize_con_maximo: 16777146,
+  bsonsize_con_maximo_mas_1: 16777277,
+  cabe_maximo: true,
+  cabe_maximo_mas_1: false,
+  capacidad_del_evento: 540
+}
+== B1 · peso del evento según órdenes embebidas ==
+{
+  ordenes: 0,
+  bsonsize: 522,
+  veces_el_evento: 1
+}
+{
+  ordenes: 100,
+  bsonsize: 13212,
+  veces_el_evento: 26
+}
+{
+  ordenes: 1000,
+  bsonsize: 128412,
+  veces_el_evento: 252.8
+}
+{
+  ordenes: 10000,
+  bsonsize: 1289412,
+  veces_el_evento: 2538.2
+}
+{
+  ordenes: 100000,
+  bsonsize: 12989412,
+  veces_el_evento: 25569.7
+}

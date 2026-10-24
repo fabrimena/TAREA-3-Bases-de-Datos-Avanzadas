@@ -1,0 +1,198 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-noquoting,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage[margin=1.7cm,top=1.4cm,bottom=1.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+
+\definecolor{acc}{HTML}{1F4E79}
+\definecolor{gris}{HTML}{5B6672}
+
+\setlength{\parskip}{2pt}
+\setlength{\topsep}{2pt}
+\setlength{\partopsep}{0pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.05}
+
+% Secciones y pie de pagina sin paquetes externos: solo LaTeX base.
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {6pt \@plus 2pt \@minus 1pt}{2pt}%
+  {\normalfont\normalsize\bfseries\color{acc}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {4pt \@plus 1pt}{1pt}%
+  {\normalfont\small\bfseries\color{acc}}}
+\renewcommand\@seccntformat[1]{\csname the#1\endcsname.\quad}
+\renewcommand{\ps@plain}{%
+  \renewcommand{\@oddhead}{}\renewcommand{\@evenhead}{}%
+  \renewcommand{\@oddfoot}{\footnotesize\color{gris}%
+    TI-4601 $\cdot$ Tarea 3 $\cdot$ Consultas y modelado de documentos en MongoDB
+    \hfill \thepage}%
+  \renewcommand{\@evenfoot}{\@oddfoot}}
+\makeatother
+\pagestyle{plain}
+
+% Marca de sección pendiente. Antes de entregar no debe quedar ningún uso (todo.md, Paso 7).
+\newcommand{\falta}[1]{{\color{red}\bfseries [FALTA (#1)]}}
+
+\begin{document}
+
+{\Large\bfseries\color{acc} Tarea 3 --- Consultas y modelado de documentos en MongoDB}\\[2pt]
+{\footnotesize\color{gris} TI-4601 Bases de Datos Avanzadas $\cdot$ Fabricio Mena $\cdot$
+\falta{Alisson Redondo} $\cdot$ Christopher Rodriguez\\
+Repositorio: \texttt{https://github.com/fabrimena/TAREA-3-Bases-de-Datos-Avanzadas}}
+
+\vspace{3pt}\hrule\vspace{4pt}
+
+\section{Entorno y datos}
+
+MongoDB 8.0.34 de un solo nodo (\texttt{ti4601-tarea3}), sin conjunto de réplicas. La semilla del curso
+(\texttt{semilla: 2026}) generó 400 eventos con 1\,189 zonas y \texttt{capacidad\_total} 162\,810
+(\texttt{sha256} \texttt{9fc6a2db\dots4774a}); \texttt{mongoimport} cargó los 400 documentos
+(\texttt{datos-manifest.txt}, \texttt{import.txt}). Todo se ejecuta con
+\texttt{consultas.js} como script y cada cifra sale de un archivo de \texttt{evidence/tarea3/}.
+
+\section{Parte A --- Consultas}
+
+\subsection{A1: conciertos de Heredia, diciembre a febrero}
+
+{\footnotesize
+\begin{verbatim}
+db.eventos.find({ categoria: "concierto", ciudad: "Heredia",
+                  fecha: { $gte: "2026-12-01", $lte: "2027-02-28" } },
+                { _id: 0, nombre: 1, recinto: 1, fecha: 1 }).sort({ fecha: 1 })
+\end{verbatim}}
+
+Devuelve \textbf{7 conciertos}, del \emph{Concierto Urbano 331} (2026-12-02, Auditorio Norte) al
+\emph{Concierto Solar 271} (2027-02-26, Parque de Eventos Sur) (\texttt{consultas.txt}). \texttt{fecha}
+es un string \texttt{AAAA-MM-DD}: su orden alfabético coincide con el cronológico, así que el rango y el
+\texttt{sort} sobre strings son correctos sin convertir a \texttt{Date}.
+
+\subsection{Índice compuesto y \texttt{explain} de A1}
+
+\texttt{db.eventos.createIndex(\{ categoria: 1, ciudad: 1, fecha: 1 \})}. El script borra el índice antes de
+medir, así que el \emph{antes} es siempre un recorrido completo.
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+& \textbf{Etapas (raíz $\leftarrow$ hoja)} & \textbf{totalKeysExamined} & \textbf{totalDocsExamined} & \textbf{nReturned} \\
+\midrule
+Antes   & \texttt{SORT} $\leftarrow$ \texttt{PROJECTION\_SIMPLE} $\leftarrow$ \texttt{COLLSCAN} & 0 & 400 & 7 \\
+Después & \texttt{PROJECTION\_SIMPLE} $\leftarrow$ \texttt{FETCH} $\leftarrow$ \texttt{IXSCAN} & 7 & 7 & 7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Orden de los campos: igualdad $\rightarrow$ orden $\rightarrow$ rango.} \texttt{categoria} y
+\texttt{ciudad} son igualdades: juntas reducen el índice a un solo tramo contiguo, (\emph{concierto},
+\emph{Heredia}). Dentro de ese tramo las claves ya están ordenadas por \texttt{fecha}, así que el rango es un
+corte del tramo (\texttt{indexBounds} \texttt{["2026-12-01", "2027-02-28"]}) y el \texttt{sort} sale gratis:
+desaparece la etapa \texttt{SORT}. Se examinan exactamente las 7 claves y los 7 documentos que se devuelven.
+Con la misma consulta y otros órdenes (\texttt{indice-orden.txt}):
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+\textbf{Índice} & \textbf{Claves} & \textbf{Docs} & \textbf{Por qué} \\
+\midrule
+\texttt{\{categoria, ciudad, fecha\}} (propuesto) & 7 & 7 & las dos igualdades acotan; \texttt{fecha} corta y ordena \\
+\texttt{\{ciudad, categoria, fecha\}} & 7 & 7 & mismas igualdades: el orden entre ellas no cambia el costo \\
+\texttt{\{categoria, fecha, ciudad\}} & 30 & 7 & tras el rango, \texttt{ciudad} ya no acota: recorre los conciertos del rango \\
+\texttt{\{fecha, categoria, ciudad\}} & 90 & 7 & recorre el rango de fechas (138 eventos), con saltos \\
+\texttt{\{categoria, fecha\}} (Lab 3, paso 5) & 31 & 31 & no tiene \texttt{ciudad}: trae cada concierto del rango para filtrarlo \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Entre las dos igualdades se puso \texttt{categoria} primero para que el prefijo \texttt{\{categoria\}} sirva a
+búsquedas solo por categoría. Con 400 documentos todo tarda 0--1 ms, por lo que la comparación se argumenta
+con claves y documentos examinados, no con tiempo.
+
+\subsection{A2: zona VIP con precio menor a 48\,000 y comparación sin \texttt{\$elemMatch}}
+
+{\footnotesize\begin{verbatim}
+db.eventos.find({zonas:{$elemMatch:{nombre:"VIP",precio:{$lt:48000}}}},
+ { _id:0, nombre:1, zonas:{$elemMatch:{nombre:"VIP"}} })
+\end{verbatim}}
+La consulta devuelve \textbf{195 eventos} con zona VIP a menos de 48\,000; la proyección
+muestra el nombre y únicamente el elemento VIP. Sin \texttt{\$elemMatch}, al usar
+\texttt{zonas.nombre = "VIP"} y \texttt{zonas.precio < 48000} como condiciones
+separadas, aparecen \textbf{265 eventos}: \textbf{70 adicionales}. MongoDB puede
+satisfacer cada condición en zonas diferentes, por ejemplo VIP a 50\,000 y
+General a 8\,000. \texttt{\$elemMatch} exige que ambas correspondan a una
+misma zona (resultados de \texttt{consultas.js}; evidencia final: \texttt{consultas.txt}).
+
+
+\subsection{A3 y A4}
+
+\textbf{A3.} Consulta de eventos con la etiqueta \texttt{accesible}, excluyendo las
+categorías teatro y conferencia:
+{\footnotesize\begin{verbatim}
+db.eventos.find({etiquetas:"accesible",
+ categoria:{$nin:["teatro","conferencia"]}}, {_id:0,nombre:1})
+\end{verbatim}}
+Resultado: \textbf{91 eventos}. La igualdad sobre \texttt{etiquetas} con el valor \texttt{accesible}
+comprueba si ese valor pertenece al arreglo; no necesita \texttt{\$in} ni
+\texttt{\$elemMatch}. \texttt{\$nin} excluye las dos categorías.
+
+\pagebreak
+\textbf{A4.} Eventos cuyo campo \texttt{patrocinador} no existe, agrupados por categoría:
+{\footnotesize\begin{verbatim}
+db.eventos.aggregate([{$match:{patrocinador:{$exists:false}}},
+ {$group:{_id:"$categoria",eventos:{$sum:1}}},{$sort:{_id:1}}])
+\end{verbatim}}
+Se obtienen \textbf{275 eventos}: concierto 57, conferencia 61, deporte 58,
+festival 49 y teatro 50. \texttt{\$exists:false} selecciona documentos sin
+\texttt{patrocinador}, mientras que \texttt{patrocinador:null} incluye también
+los que tienen el campo con valor \texttt{null}. Como la semilla no genera ese
+valor, ambos filtros producen el mismo conteo.
+
+\subsection{A5: capacidad total por ciudad}
+
+{\footnotesize\begin{verbatim}
+db.eventos.aggregate([{$unwind:"$zonas"},
+ {$group:{_id:"$ciudad",capacidad_total:{$sum:"$zonas.capacidad"}}},
+ {$sort:{capacidad_total:-1}}])
+\end{verbatim}}
+\texttt{\$unwind} produce un documento por cada elemento de \texttt{zonas}: un evento con 3 zonas pasa
+a ser 3 documentos que repiten \texttt{ciudad} y llevan una sola zona cada uno, así que los 400 eventos
+se convierten en 1\,189 filas y \texttt{\$sum} puede sumar \texttt{zonas.capacidad} por ciudad.
+Resultado (8 ciudades): \textbf{Heredia 30\,380}, Liberia 24\,160, San Carlos 21\,810, Alajuela 21\,020,
+Puntarenas 17\,180, San José 17\,150, Limón 15\,560 y \textbf{Cartago 15\,550}. Control: la suma de las
+8 es \textbf{162\,810}, igual a \texttt{capacidad\_total} de \texttt{datos-manifest.txt}.
+
+\section{Parte B --- Anidar o referenciar}
+
+\textbf{B.1 Tamaño} (\texttt{parte\_b.js}, \texttt{parte-b.txt}). Una orden con \texttt{\_id},
+\texttt{evento\_id}, \texttt{zona}, \texttt{cantidad}, \texttt{estado} y \texttt{creada\_en} pesa
+\textbf{123 B}; el evento \texttt{EV-0001} sin órdenes, \textbf{508 B}. La estimación ingenua
+$(16\,777\,216-508)/123$ da 136\,396 órdenes, pero dentro de un arreglo cada elemento paga además
+1 byte de tipo y su índice como \emph{string} con terminador (\texttt{"0"}\dots\texttt{"999"}):
+medido con 1\,000 órdenes embebidas, cada una cuesta \textbf{127{,}89 B} (4{,}89 B extra), y el costo
+sube a 131 B cuando el índice llega a 6 dígitos. El máximo exacto es \textbf{128\,914 órdenes}:
+con ellas el documento mide 16\,777\,146 B y con una más, 16\,777\,277 B (no cabe). Mucho antes del
+límite el problema es el peso: con 10\,000 órdenes el evento pasa de 0{,}5 KB a 1{,}29 MB, y
+\emph{cada} lectura del evento (listar, ver zonas) trae todas sus órdenes.
+
+\textbf{B.2 Concurrencia.} MongoDB serializa las escrituras sobre un mismo documento: si cientos de
+compradores agregan su orden al mismo evento, WiredTiger detecta conflictos de escritura y las
+reintenta una tras otra, y el evento se vuelve un documento caliente. \emph{Ventaja:} el descuento de
+stock y el registro de la orden ocurren en una sola actualización atómica, sin transacción
+multi-documento. \emph{Desventaja:} contención en la venta de un evento popular, un documento que
+crece sin límite y cuesta más en cada lectura y en la replicación, y el tope de 16 MB.
+\textbf{Decisión:} referenciar (\texttt{ordenes} con \texttt{evento\_id}, como en el Lab 3) y dejar
+en el evento solo el contador \texttt{zonas.disponibles}.
+
+\textbf{B.3 Regla.} \emph{Anidar lo que se lee siempre junto, pertenece a un solo padre y está
+acotado; referenciar lo que crece sin límite, se escribe en paralelo o se consulta por separado.}
+En un sistema de biblioteca, los autores y el ISBN de un libro se anidan en el libro (pocos, fijos y
+siempre se muestran con él); los préstamos se referencian en su propia colección con
+\texttt{libro\_id}, porque se acumulan sin fin, los registran varios mostradores a la vez y se
+consultan por usuario o por fecha de vencimiento.
+
+\end{document}
