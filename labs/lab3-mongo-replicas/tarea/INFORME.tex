@@ -43,7 +43,7 @@
 
 {\Large\bfseries\color{acc} Tarea 3 --- Consultas y modelado de documentos en MongoDB}\\[2pt]
 {\footnotesize\color{gris} TI-4601 Bases de Datos Avanzadas $\cdot$ Fabricio Mena $\cdot$
-\falta{nombre de B} $\cdot$ \falta{nombre de C}\\
+\falta{Alisson Redondo} $\cdot$ \falta{nombre de C}\\
 Repositorio: \texttt{https://github.com/fabrimena/TAREA-3-Bases-de-Datos-Avanzadas}}
 
 \vspace{3pt}\hrule\vspace{4pt}
@@ -115,13 +115,42 @@ con claves y documentos examinados, no con tiempo.
 
 \subsection{A2: zona VIP con precio menor a 48\,000 y comparación sin \texttt{\$elemMatch}}
 
-\falta{Persona B: consulta con \texttt{\$elemMatch} en filtro y proyección; conteo con y sin
-\texttt{\$elemMatch} (195 contra 265) y explicación de la diferencia}
+{\footnotesize\begin{verbatim}
+db.eventos.find({zonas:{$elemMatch:{nombre:"VIP",precio:{$lt:48000}}}},
+ { _id:0, nombre:1, zonas:{$elemMatch:{nombre:"VIP"}} })
+\end{verbatim}}
+La consulta devuelve \textbf{195 eventos} con zona VIP a menos de 48\,000; la proyección
+muestra el nombre y únicamente el elemento VIP. Sin \texttt{\$elemMatch}, al usar
+\texttt{zonas.nombre = "VIP"} y \texttt{zonas.precio < 48000} como condiciones
+separadas, aparecen \textbf{265 eventos}: \textbf{70 adicionales}. MongoDB puede
+satisfacer cada condición en zonas diferentes, por ejemplo VIP a 50\,000 y
+General a 8\,000. \texttt{\$elemMatch} exige que ambas correspondan a una
+misma zona (resultados de \texttt{consultas.js}; evidencia final: \texttt{consultas.txt}).
+
 
 \subsection{A3 y A4}
 
-\falta{Persona B: A3 (etiqueta \texttt{accesible}, \texttt{\$nin}) y A4 (\texttt{\$exists} + \texttt{\$group}),
-con su resultado resumido}
+\textbf{A3.} Consulta de eventos con la etiqueta \texttt{accesible}, excluyendo las
+categorías teatro y conferencia:
+{\footnotesize\begin{verbatim}
+db.eventos.find({etiquetas:"accesible",
+ categoria:{$nin:["teatro","conferencia"]}}, {_id:0,nombre:1})
+\end{verbatim}}
+Resultado: \textbf{91 eventos}. La igualdad sobre \texttt{etiquetas} con el valor \texttt{accesible}
+comprueba si ese valor pertenece al arreglo; no necesita \texttt{\$in} ni
+\texttt{\$elemMatch}. \texttt{\$nin} excluye las dos categorías.
+
+\pagebreak
+\textbf{A4.} Eventos cuyo campo \texttt{patrocinador} no existe, agrupados por categoría:
+{\footnotesize\begin{verbatim}
+db.eventos.aggregate([{$match:{patrocinador:{$exists:false}}},
+ {$group:{_id:"$categoria",eventos:{$sum:1}}},{$sort:{_id:1}}])
+\end{verbatim}}
+Se obtienen \textbf{275 eventos}: concierto 57, conferencia 61, deporte 58,
+festival 49 y teatro 50. \texttt{\$exists:false} selecciona documentos sin
+\texttt{patrocinador}, mientras que \texttt{patrocinador:null} incluye también
+los que tienen el campo con valor \texttt{null}. Como la semilla no genera ese
+valor, ambos filtros producen el mismo conteo.
 
 \subsection{A5: capacidad total por ciudad}
 
