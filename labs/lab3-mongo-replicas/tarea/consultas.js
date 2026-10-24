@@ -71,12 +71,31 @@ print("== A1 · explain después del índice ==");
 printjson(resumenExplain(db.eventos.find(filtroA1, proyeccionA1).sort(ordenA1).explain("executionStats")));
 
 // ============================================================ Persona B · A2, A3, A4
-// FALTA (Persona B): ver todo.md, Paso 5.
+// A2: eventos con zona VIP cuyo precio sea menor a 48000.
+// $elemMatch asegura que nombre y precio correspondan a la misma zona.
+const filtroA2 = {
+  zonas: {
+    $elemMatch: {
+      nombre: "VIP",
+      precio: { $lt: 48000 }
+    }
+  }
+};
+
 print("== A2 ==");
-print("== A2 · comparación con y sin $elemMatch ==");
+db.eventos.find(
+  filtroA2,
+  {
+    _id: 0,
+    nombre: 1,
+    zonas: { $elemMatch: { nombre: "VIP" } }
+  }
+).forEach(printjson);
+
+// Pendiente: comparacion A2, A3 y A4.
+print("== A2 - comparacion con y sin $elemMatch ==");
 print("== A3 ==");
 print("== A4 ==");
-
 // ============================================================ Persona C · A5
 // FALTA (Persona C): ver todo.md, Paso 6.
 print("== A5 ==");

@@ -70,8 +70,8 @@ que no deberían chocar al fusionar.
 
 ### Checklist — Persona B
 
-- [ ] Paso 1 en su máquina (contenedor + semilla; compare el `sha256` con `evidence/tarea3/datos-manifest.txt`, sin subir evidencia)
-- [ ] Paso 5 · **A2** con `$elemMatch` en filtro y proyección · commit
+- [x] Paso 1 en su máquina (contenedor + semilla; compare el `sha256` con `evidence/tarea3/datos-manifest.txt`, sin subir evidencia)
+- [x] Paso 5 · **A2** con `$elemMatch` en filtro y proyección · commit
 - [ ] Paso 5 · **A2 · comparación** con y sin `$elemMatch` (conteo de ambas impreso en `consultas.js`) · commit
 - [ ] Paso 5 · **A3** (`$nin` sobre la categoría, consulta sobre arreglo) · commit
 - [ ] Paso 5 · **A4** (`$exists` + `$group`) · commit
