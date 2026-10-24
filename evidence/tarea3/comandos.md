@@ -8,3 +8,4 @@
 - 2026-10-22 13:56:06 · Paso 3 · `orden_indice.js: claves examinadas 7 (propuesto) / 30 / 90 / 31` · OK
 - 2026-10-22 13:57:20 · Paso 4 · `INFORME.tex: sección A1 + índice; secciones de B y C marcadas con \falta{}` · OK
 - 2026-10-24 14:03:26 · Paso 6 · `consultas.js: A5 (8 ciudades, Heredia 30380 … Cartago 15550; suma 162810) · MongoDB 8.2.12 local` · OK
+- 2026-10-24 14:04:07 · Paso 6 · `parte_b.js: orden 123 B, evento 508 B, 127.89 B por orden embebida, máximo 128914 órdenes (ingenua 136396)` · OK
