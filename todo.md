@@ -13,13 +13,13 @@ Reglas que no se negocian:
 
 ---
 
-## Estado actual (actualizado por A el 22 oct)
+## Estado actual (actualizado por A el 24 oct)
 
 | Persona | Hecho | Pendiente |
 | ------- | ----- | --------- |
-| **A** | Pasos 0–4: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe, invitaciones a B y C | fusionar `fabricio` → `main` · Paso 7 (espera a B y C) |
-| **B** | — | Paso 1 en su máquina, Paso 5 (A2, comparación, A3, A4), su sección del informe |
-| **C** | Paso 1 en su máquina (MongoDB 8.2, `sha256` igual), Paso 6: A5 y `parte_b.js` + `parte-b.txt`, sección A5 + Parte B de `INFORME.tex` | PR `Chris` → `main` |
+| **A** | Pasos 0–4 y 7: repo, entorno, esqueleto de `consultas.js`, A1 + índice + `explain`, orden del índice, base del informe, invitaciones, fusión de las tres ramas en `main`, ejecución final (`9000b30`) y PDF de 2 páginas (`5243fbe`) | subir el PDF y el enlace al repo a TEC Digital (mié 28 oct, 11:00 pm) |
+| **B** | Paso 1 en su máquina, Paso 5: A2, comparación con y sin `$elemMatch`, A3 y A4 (`c99748a` a `45c73f1`), sección A2–A4 de `INFORME.tex` (`0cac799`) | — |
+| **C** | Paso 1 en su máquina (MongoDB 8.2, `sha256` igual), Paso 6: A5 y `parte_b.js` + `parte-b.txt`, sección A5 + Parte B de `INFORME.tex` (`b703c25`, `c899f5d`, `6a68795`) | — |
 
 Leyenda: «hecho» va con el commit que lo respalda; «pendiente», con lo que lo bloquea.
 
@@ -32,7 +32,7 @@ Leyenda: «hecho» va con el commit que lo respalda; «pendiente», con lo que l
 | Persona | Nombre | Bloque | Archivos | Puntos que defiende | Informe |
 | ------- | ------ | ------ | -------- | ------------------- | ------- |
 | **A** | Fabricio Mena | Entorno, esqueleto, **A1 + índice/explain** | `tarea/consultas.js` (esqueleto + bloque A1), `tarea/orden_indice.js` | A1 (9) + índice (15) = 24 | Sección A1 + índice, **armar el PDF final** y ejecución final |
-| **B** | _______ | **A2** (+ comparación sin `$elemMatch`), **A3**, **A4** | bloques A2–A4 de `tarea/consultas.js` | 9 + 10 + 9 + 9 = 37 | A2 (comparación), A3, A4 |
+| **B** | Alisson Redondo | **A2** (+ comparación sin `$elemMatch`), **A3**, **A4** | bloques A2–A4 de `tarea/consultas.js` | 9 + 10 + 9 + 9 = 37 | A2 (comparación), A3, A4 |
 | **C** | Christopher Rodriguez | **A5** y **Parte B** (embeber o referenciar) | bloque A5 de `tarea/consultas.js`, `tarea/parte_b.js` | 9 + 30 = 39 | A5 + Parte B (media página) |
 
 A arma el entorno y el esqueleto primero; B y C trabajan en paralelo sobre bloques distintos del mismo archivo, así
@@ -64,9 +64,9 @@ que no deberían chocar al fusionar.
 - [x] Paso 3 · **A1** + `explain` antes/después + `createIndex` → `consultas.txt` · commit — hecho en `8af87c7` (7 eventos; `COLLSCAN` 400 docs → `IXSCAN` 7/7/7)
 - [x] Paso 3 · Orden de los campos del índice medido → `indice-orden.txt` · commit — hecho en `c8599f4` (7 claves contra 30 / 90 / 31)
 - [x] Paso 4 · Esqueleto del informe `tarea/INFORME.tex` con la sección de A1 e índice · commit — hecho en `1d28b1f`
-- [ ] Paso 4 · Fusionar `fabricio` en `main` (PR) para que B y C partan del esqueleto — pendiente: revisión de A (no depende de B ni C)
-- [ ] Paso 7 · Ejecución final completa de `consultas.js` (con A2–A5 ya fusionados) → `consultas.txt` · commit — pendiente: **B** (A2–A4) y **C** (A5)
-- [ ] Paso 7 · Armar el PDF final (≤ 2 páginas) + revisión de `FALTA` + lista de control — pendiente: **B** y **C** (sus secciones, `parte-b.txt` y sus nombres)
+- [x] Paso 4 · Fusionar `fabricio` en `main` (PR) para que B y C partan del esqueleto — hecho: `fabricio`, `alisson` y `Chris` se fusionaron juntas en `main` (las tres ramas van en línea, sin conflictos)
+- [x] Paso 7 · Ejecución final completa de `consultas.js` (con A2–A5 ya fusionados) → `consultas.txt` · commit — hecho en `9000b30` (MongoDB 8.0.34; `parte_b.js` da el mismo `parte-b.txt`)
+- [x] Paso 7 · Armar el PDF final (≤ 2 páginas) + revisión de `FALTA` + lista de control — hecho en `5243fbe` (`INFORME.pdf`, 2 páginas, sin `FALTA`)
 
 ### Checklist — Persona B
 
@@ -103,7 +103,7 @@ git checkout -b <su-nombre> main      # después de que A fusione fabricio
 
 ---
 
-## Paso 1 — Entorno (una sola vez) · Responsable: A (evidencia) · B y C (solo en su máquina) · A: hecho · B y C: pendiente
+## Paso 1 — Entorno (una sola vez) · Responsable: A (evidencia) · B y C (solo en su máquina) · hecho
 
 **HOST**, desde la raíz del repo:
 
@@ -175,7 +175,7 @@ claves y documentos examinados, no con ms** (400 documentos tardan ~1 ms en cual
 
 ---
 
-## Paso 4 — Base del informe y PR · Responsable: A · informe: hecho · PR: pendiente
+## Paso 4 — Base del informe y PR · Responsable: A · hecho
 
 - `labs/lab3-mongo-replicas/tarea/INFORME.tex`: misma plantilla de los informes del Lab 1 y Lab 2. Cada sección
   pendiente usa la macro `\falta{Persona X: ...}` (sale en rojo); B y C reemplazan **solo** la suya.
@@ -183,7 +183,7 @@ claves y documentos examinados, no con ms** (400 documentos tardan ~1 ms en cual
 
 ---
 
-## Paso 5 — A2, A3 y A4 · Responsable: B
+## Paso 5 — A2, A3 y A4 · Responsable: B · hecho
 
 Predicción ANTES de correr: ¿la versión sin `$elemMatch` devuelve más, menos o los mismos eventos? ¿Por qué?
 
@@ -239,7 +239,7 @@ log 5 "A2 (195 vs 265), A3 (91), A4 (275)" OK    # en HOST
 
 ---
 
-## Paso 6 — A5 y Parte B · Responsable: C
+## Paso 6 — A5 y Parte B · Responsable: C · hecho
 
 **A5** — pegue en su bloque de `consultas.js` (entre los comentarios `Persona C`):
 
@@ -288,7 +288,7 @@ log 6 "A5 (162810) + parte_b.js" OK    # en HOST
 
 ---
 
-## Paso 7 — Ejecución final y PDF · Responsable: A · pendiente: espera a B y C
+## Paso 7 — Ejecución final y PDF · Responsable: A · hecho
 
 Con las ramas de B y C ya fusionadas en `main`:
 
@@ -337,15 +337,15 @@ evidence/tarea3/consultas.txt      indice-orden.txt        parte-b.txt
 
 ### Lista de control final
 
-- [ ] `consultas.js` corre completo con el comando del enunciado (sin `use` ni `show`)
-- [ ] Cada consulta tiene su `print("== Ax ==")` y proyecciones mínimas
+- [x] `consultas.js` corre completo con el comando del enunciado (sin `use` ni `show`) — hecho en `9000b30`
+- [x] Cada consulta tiene su `print("== Ax ==")` y proyecciones mínimas — 9 encabezados en `consultas.txt`
 - [x] `explain` antes (`COLLSCAN`) y después (`IXSCAN`) con `totalDocsExamined`, `totalKeysExamined`, `nReturned` y etapa — hecho en `8af87c7`
 - [x] Orden de los campos del índice justificado — hecho en `c8599f4` + sección A1 de `INFORME.tex`
-- [ ] A2: 195 contra 265 explicado
-- [ ] Parte B con `bsonsize()` y cifras que salen de `parte-b.txt`
-- [ ] Cada cifra del PDF sale de un archivo de `evidence/tarea3/`
-- [ ] PDF de 2 páginas como máximo, con el enlace al repo
-- [ ] Commits de los 3 integrantes, repartidos en la semana
+- [x] A2: 195 contra 265 explicado — hecho en `0cac799` (sección A2 de `INFORME.tex`)
+- [x] Parte B con `bsonsize()` y cifras que salen de `parte-b.txt` — hecho en `c899f5d` y `6a68795`
+- [x] Cada cifra del PDF sale de un archivo de `evidence/tarea3/` — revisado en el Paso 7, sin `FALTA:`
+- [x] PDF de 2 páginas como máximo, con el enlace al repo — hecho en `5243fbe`
+- [x] Commits de los 3 integrantes, repartidos en la semana — Fabricio (22 y 24 oct), Alisson y Christopher (24 oct)
 
 ---
 
