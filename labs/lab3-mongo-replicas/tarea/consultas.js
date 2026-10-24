@@ -126,8 +126,30 @@ db.eventos.find(
   }
 ).forEach(printjson);
 
-// Pendiente: comparacion A4.
+// A4: contar eventos sin patrocinador por categoria.
+// $exists: false selecciona documentos donde el campo no existe.
+// $group agrupa por categoria y cuenta los eventos.
+
 print("== A4 ==");
+
+db.eventos.aggregate([
+  {
+    $match: {
+      patrocinador: { $exists: false }
+    }
+  },
+  {
+    $group: {
+      _id: "$categoria",
+      eventos: { $sum: 1 }
+    }
+  },
+  {
+    $sort: {
+      _id: 1
+    }
+  }
+]).forEach(printjson);
 // ============================================================ Persona C · A5
 // FALTA (Persona C): ver todo.md, Paso 6.
 print("== A5 ==");

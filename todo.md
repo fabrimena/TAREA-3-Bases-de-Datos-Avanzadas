@@ -74,7 +74,7 @@ que no deberían chocar al fusionar.
 - [x] Paso 5 · **A2** con `$elemMatch` en filtro y proyección · commit
 - [x] Paso 5 · **A2 · comparación** con y sin `$elemMatch` (conteo de ambas impreso en `consultas.js`) · commit
 - [x] Paso 5 · **A3** (`$nin` sobre la categoría, consulta sobre arreglo) · commit
-- [ ] Paso 5 · **A4** (`$exists` + `$group`) · commit
+- [x] Paso 5 · **A4** (`$exists` + `$group`) · commit
 - [ ] Informe: A2–A4 y explicación de la diferencia de A2 (con los dos números)
 
 ### Checklist — Persona C
