@@ -33,7 +33,7 @@ Leyenda: «hecho» va con el commit que lo respalda; «pendiente», con lo que l
 | ------- | ------ | ------ | -------- | ------------------- | ------- |
 | **A** | Fabricio Mena | Entorno, esqueleto, **A1 + índice/explain** | `tarea/consultas.js` (esqueleto + bloque A1), `tarea/orden_indice.js` | A1 (9) + índice (15) = 24 | Sección A1 + índice, **armar el PDF final** y ejecución final |
 | **B** | _______ | **A2** (+ comparación sin `$elemMatch`), **A3**, **A4** | bloques A2–A4 de `tarea/consultas.js` | 9 + 10 + 9 + 9 = 37 | A2 (comparación), A3, A4 |
-| **C** | _______ | **A5** y **Parte B** (embeber o referenciar) | bloque A5 de `tarea/consultas.js`, `tarea/parte_b.js` | 9 + 30 = 39 | A5 + Parte B (media página) |
+| **C** | Christopher Rodriguez | **A5** y **Parte B** (embeber o referenciar) | bloque A5 de `tarea/consultas.js`, `tarea/parte_b.js` | 9 + 30 = 39 | A5 + Parte B (media página) |
 
 A arma el entorno y el esqueleto primero; B y C trabajan en paralelo sobre bloques distintos del mismo archivo, así
 que no deberían chocar al fusionar.
@@ -50,7 +50,7 @@ que no deberían chocar al fusionar.
 
 ### Flujo de ramas
 
-- Cada quien trabaja en **su rama** (A: `fabricio`; B y C: la suya, p. ej. con su nombre) y abre un PR a `main`.
+- Cada quien trabaja en **su rama** (A: `fabricio`; B y C `chris`: la suya, p. ej. con su nombre) y abre un PR a `main`.
 - B y C crean su rama desde `main` **después** de que se fusione `fabricio` (ahí está el esqueleto de `consultas.js`).
 - En `consultas.js` cada quien edita **solo su bloque** (están delimitados con comentarios `Persona X`).
 - La evidencia final `evidence/tarea3/consultas.txt` la regenera A en el Paso 7, con todo fusionado.

@@ -151,5 +151,10 @@ db.eventos.aggregate([
   }
 ]).forEach(printjson);
 // ============================================================ Persona C · A5
-// FALTA (Persona C): ver todo.md, Paso 6.
+// A5 — capacidad total por ciudad: una fila por zona ($unwind), suma por ciudad, de mayor a menor
 print("== A5 ==");
+db.eventos.aggregate([
+  { $unwind: "$zonas" },
+  { $group: { _id: "$ciudad", capacidad_total: { $sum: "$zonas.capacidad" } } },
+  { $sort: { capacidad_total: -1 } },
+]).forEach(printjson);
