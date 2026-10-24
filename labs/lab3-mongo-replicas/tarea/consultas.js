@@ -109,8 +109,24 @@ printjson({
   diferencia: sinElemMatch - conElemMatch
 });
 
-// Pendiente: comparacion A3 y A4.
+// A3: eventos accesibles, excluyendo teatro y conferencia.
+// La igualdad sobre etiquetas busca el valor dentro del arreglo.
+// $nin excluye las categorias indicadas.
+
 print("== A3 ==");
+
+db.eventos.find(
+  {
+    etiquetas: "accesible",
+    categoria: { $nin: ["teatro", "conferencia"] }
+  },
+  {
+    _id: 0,
+    nombre: 1
+  }
+).forEach(printjson);
+
+// Pendiente: comparacion A4.
 print("== A4 ==");
 // ============================================================ Persona C · A5
 // FALTA (Persona C): ver todo.md, Paso 6.
